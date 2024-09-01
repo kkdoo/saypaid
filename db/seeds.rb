@@ -7,3 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+%w[ USD EUR RUB ].each do |currency_code|
+  Currency.find_or_create_by(id: currency_code)
+end

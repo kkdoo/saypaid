@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: currencies
+#
+#  id         :string(5)        not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe Currency, type: :model do
