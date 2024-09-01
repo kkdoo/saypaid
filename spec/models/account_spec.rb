@@ -5,4 +5,8 @@ RSpec.describe Account, type: :model do
     it { should have_many(:layers) }
     it { should belong_to(:default_currency) }
   end
+
+  describe 'db' do
+    include_examples "have column #discarded_at"
+  end
 end

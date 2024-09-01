@@ -17,9 +17,13 @@
 class Layer < ApplicationRecord
   include Discard::Model
 
+  STATUSES_LIST = %w[draft active disabled].freeze
+
   belongs_to :account
   has_many :plans
   has_many :customers
   has_many :subscriptions
   has_many :pricing_tables
+
+  enum :status, STATUSES_LIST.zip(STATUSES_LIST).to_h
 end
