@@ -1,0 +1,43 @@
+services:
+  core:
+    restart: unless-stopped
+    build: ./.docker/local/
+    image: saypaid-core
+    entrypoint: "./bin/docker-entrypoint"
+    command: bash -c "bundle exec foreman start -f Procfile.dev"
+    volumes:
+      - .:/usr/src/app
+      - ./.docker/volumes/core/bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - BUNDLE_PATH=/usr/local/bundle
+      - HISTFILE=/usr/src/app/log/.bash_history
+    depends_on:
+      - postgres
+      - redis
+    tty: true
+    stdin_open: true
+    shm_size: "2147483648"
+    networks:
+      - default
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.docker/volumes/postgresql/data/:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    volumes:
+      - ./.docker/volumes/redis/data/:/data
+
+networks:
+  default:
+    driver: bridge
