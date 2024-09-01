@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_01_145945) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_01_191023) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -74,6 +74,36 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_01_145945) do
     t.decimal "flat_fee", precision: 20, scale: 5, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pricing_card_features", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "pricing_card_id", null: false
+    t.string "name", null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_pricing_card_features_on_discarded_at"
+  end
+
+  create_table "pricing_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "pricing_table_id", null: false
+    t.uuid "plan_id", null: false
+    t.string "name", null: false
+    t.integer "trial_in_days", default: 0
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_pricing_cards_on_discarded_at"
+  end
+
+  create_table "pricing_tables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "layer_id", null: false
+    t.string "code", null: false
+    t.string "name"
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_pricing_tables_on_discarded_at"
   end
 
   create_table "subscription_versions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -21,4 +21,5 @@ class Layer < ApplicationRecord
   has_many :plans
   has_many :customers
   has_many :subscriptions
+  has_many :pricing_tables
 end
