@@ -24,6 +24,6 @@ class Plan < ApplicationRecord
   belongs_to :layer
   belongs_to :currency
   has_many :plan_versions, -> { order(created_at: :desc) }
-  belongs_to :current_version, class_name: "PlanVersion"
+  belongs_to :current_version, class_name: "PlanVersion", optional: true
   has_many :pricing_cards
 end

@@ -13,4 +13,8 @@ class Prices::Base < ApplicationRecord
   self.table_name = "prices"
 
   belongs_to :plan_version
+
+  def kind
+    raise "Not implemented"
+  end
 end

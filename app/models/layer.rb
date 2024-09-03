@@ -5,6 +5,7 @@
 #  id           :uuid             not null, primary key
 #  discarded_at :datetime
 #  livemode     :boolean          default(FALSE), not null
+#  name         :string           not null
 #  status       :string           default("draft"), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

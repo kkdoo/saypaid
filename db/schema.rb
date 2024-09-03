@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_01_191023) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_03_114607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_01_191023) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", null: false
     t.index ["discarded_at"], name: "index_layers_on_discarded_at"
   end
 
@@ -88,7 +89,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_01_191023) do
   create_table "pricing_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "pricing_table_id", null: false
     t.uuid "plan_id", null: false
-    t.string "name", null: false
     t.integer "trial_in_days", default: 0
     t.datetime "discarded_at"
     t.datetime "created_at", null: false

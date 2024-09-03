@@ -4,7 +4,6 @@
 #
 #  id               :uuid             not null, primary key
 #  discarded_at     :datetime
-#  name             :string           not null
 #  trial_in_days    :integer          default(0)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

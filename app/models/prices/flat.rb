@@ -10,4 +10,7 @@
 #  plan_version_id :uuid             not null
 #
 class Prices::Flat < Prices::Base
+  def kind
+    "flat"
+  end
 end

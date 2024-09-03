@@ -1,0 +1,133 @@
+layers:
+  - name: "Test layer"
+    pricing_tables:
+      - code: monthly_and_yearly_pricing
+        name: "Monthly and Yearly plans"
+        cards:
+          - plan: "free"
+            features:
+              - name: "400 compute minutes/month"
+              - name: "5 users/month"
+          - plan: "silver_monthly"
+            trial_in_days: 14
+            features:
+              - name: "Code Ownership and Protected Branches"
+              - name: "Merge Requests with Approval Rules"
+              - name: "Team Planning"
+              - name: "Enterprise User and Incident Management"
+              - name: "Support"
+              - name: "10,000 compute minutes/month"
+          - plan: "silver_yearly"
+            trial_in_days: 14
+            features:
+              - name: "Code Ownership and Protected Branches"
+              - name: "Merge Requests with Approval Rules"
+              - name: "Team Planning"
+              - name: "Enterprise User and Incident Management"
+              - name: "Support"
+              - name: "10,000 compute minutes/month"
+          - plan: "gold_monthly"
+            trial_in_days: 14
+            features:
+              - name: "Dynamic Application Security Testing"
+              - name: "Security Dashboards"
+              - name: "Vulnerability Management"
+              - name: "Dependency Scanning"
+              - name: "Container Scanning"
+              - name: "Static Application Security Testing"
+              - name: "Multi-Level Epics"
+              - name: "Enterprise Agile Planning"
+              - name: "Portfolio Management"
+              - name: "Custom Roles"
+              - name: "Value Stream Management"
+              - name: "50,000 compute minutes per month"
+              - name: "Free guest users"
+          - plan: "gold_yearly"
+            trial_in_days: 14
+            features:
+              - name: "Dynamic Application Security Testing"
+              - name: "Security Dashboards"
+              - name: "Vulnerability Management"
+              - name: "Dependency Scanning"
+              - name: "Container Scanning"
+              - name: "Static Application Security Testing"
+              - name: "Multi-Level Epics"
+              - name: "Enterprise Agile Planning"
+              - name: "Portfolio Management"
+              - name: "Custom Roles"
+              - name: "Value Stream Management"
+              - name: "50,000 compute minutes per month"
+              - name: "Free guest users"
+      - code: monthly_pricing
+        name: "Only monthly plans"
+        cards:
+          - plan: "free"
+            features:
+              - name: "400 compute minutes/month"
+              - name: "5 users/month"
+          - plan: "silver_monthly"
+            trial_in_days: 14
+            features:
+              - name: "Code Ownership and Protected Branches"
+              - name: "Merge Requests with Approval Rules"
+              - name: "Team Planning"
+              - name: "Enterprise User and Incident Management"
+              - name: "Support"
+              - name: "10,000 compute minutes/month"
+          - plan: "gold_monthly"
+            trial_in_days: 14
+            features:
+              - name: "Dynamic Application Security Testing"
+              - name: "Security Dashboards"
+              - name: "Vulnerability Management"
+              - name: "Dependency Scanning"
+              - name: "Container Scanning"
+              - name: "Static Application Security Testing"
+              - name: "Multi-Level Epics"
+              - name: "Enterprise Agile Planning"
+              - name: "Portfolio Management"
+              - name: "Custom Roles"
+              - name: "Value Stream Management"
+              - name: "50,000 compute minutes per month"
+              - name: "Free guest users"
+    plans:
+      - code: free
+        name: "Free"
+        interval: "month"
+        interval_count: 1
+        currency: "USD"
+        prices:
+          - kind: "flat"
+            flat_fee: 0.00
+      - code: silver_monthly
+        name: "Silver Monthly"
+        interval: "month"
+        interval_count: 1
+        currency: "USD"
+        prices:
+          - kind: "flat"
+            flat_fee: 10.00
+      - code: gold_monthly
+        name: "Gold Monthly"
+        interval: "month"
+        interval_count: 1
+        currency: "USD"
+        prices:
+          - kind: "flat"
+            flat_fee: 30.00
+      - code: silver_yearly
+        name: "Silver Yearly"
+        interval: "year"
+        interval_count: 1
+        currency: "USD"
+        prices:
+          - kind: "flat"
+            flat_fee: 100.00
+      - code: gold_yearly
+        name: "Gold Yearly"
+        interval: "year"
+        interval_count: 1
+        currency: "USD"
+        prices:
+          - kind: "flat"
+            flat_fee: 300.00
