@@ -38,6 +38,8 @@ gem "bootsnap", require: false
 
 gem "foreman"
 gem "discard"
+gem "grape"
+gem "grape-entity"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
