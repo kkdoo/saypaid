@@ -26,4 +26,11 @@ class Plan < ApplicationRecord
   has_many :plan_versions, -> { order(created_at: :desc) }
   belongs_to :current_version, class_name: "PlanVersion", optional: true
   has_many :pricing_cards
+  has_many :prices, through: :current_version
+
+  enum :interval, { day: 0, week: 1, month: 2, year: 3 }
+
+  def interval_length
+    interval_count.public_send(interval)
+  end
 end

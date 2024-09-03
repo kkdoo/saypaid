@@ -22,5 +22,17 @@ class Subscription < ApplicationRecord
   belongs_to :layer
   belongs_to :customer
   has_many :subscription_versions, -> { order(created_at: :desc) }
-  belongs_to :current_version, class_name: "SubscriptionVersion"
+  belongs_to :current_version, class_name: "SubscriptionVersion", optional: true
+
+  enum :status, {
+    created: 0,
+    trial: 1,
+    pending: 2,
+    active: 3,
+    incomplete: 4,
+    past_due: 5,
+    terminated: 6,
+    canceled: 7,
+    unpaid: 8,
+  }
 end

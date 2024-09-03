@@ -27,9 +27,12 @@ class RootApi < Grape::API
   end
 
   rescue_from ActiveRecord::RecordInvalid do |error|
+    pp error
+    puts error.backtrace.join("\n\t")
     message = error.record.errors.full_messages.join(", ")
     error!({ status: 400, message: }, 400)
   end
 
   mount V1::CustomersApi => '/'
+  mount V1::SubscriptionsApi => '/'
 end

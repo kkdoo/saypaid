@@ -18,4 +18,5 @@
 class SubscriptionVersion < ApplicationRecord
   belongs_to :subscription
   belongs_to :plan_version
+  has_one :plan, through: :plan_version
 end
