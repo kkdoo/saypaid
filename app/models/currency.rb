@@ -7,6 +7,7 @@
 #  updated_at :datetime         not null
 #
 class Currency < ApplicationRecord
-  has_many :plans
   has_many :accounts, foreign_key: "default_currency_id"
+  has_many :plans
+  has_many :invoices
 end

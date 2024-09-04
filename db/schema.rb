@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_04_100613) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_04_153828) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -38,6 +38,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_100613) do
     t.index ["discarded_at"], name: "index_customers_on_discarded_at"
   end
 
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "layer_id", null: false
+    t.uuid "customer_id", null: false
+    t.integer "status", default: 0, null: false
+    t.string "currency_id", limit: 5, null: false
+    t.datetime "due_date", null: false
+    t.decimal "total", precision: 20, scale: 5, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_invoices_on_discarded_at"
+  end
+
   create_table "layers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.boolean "livemode", default: false, null: false
@@ -47,6 +60,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_100613) do
     t.datetime "updated_at", null: false
     t.string "name", null: false
     t.index ["discarded_at"], name: "index_layers_on_discarded_at"
+  end
+
+  create_table "line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "invoice_id", null: false
+    t.uuid "subscription_version_id", null: false
+    t.decimal "amount", precision: 20, scale: 5, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_line_items_on_discarded_at"
   end
 
   create_table "plan_versions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

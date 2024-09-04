@@ -23,7 +23,7 @@ FactoryBot.define do
     layer
     code { 'silver_monthly' }
     name { 'Silver Monthly' }
-    currency_id { 'USD' }
+    currency { Currency.find('USD') }
     interval { 'month' }
     interval_count { 1 }
 

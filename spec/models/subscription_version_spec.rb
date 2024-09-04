@@ -22,6 +22,7 @@ RSpec.describe SubscriptionVersion, type: :model do
     it { should belong_to(:subscription) }
     it { should belong_to(:plan_version) }
     it { should have_one(:plan).through(:plan_version) }
+    it { should have_many(:line_items) }
   end
 
   describe 'validations' do

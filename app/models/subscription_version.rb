@@ -19,6 +19,7 @@ class SubscriptionVersion < ApplicationRecord
   belongs_to :subscription
   belongs_to :plan_version
   has_one :plan, through: :plan_version
+  has_many :line_items
 
   validates :start_at, :current_period_start, :current_period_end, presence: true
 end
