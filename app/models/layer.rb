@@ -25,6 +25,15 @@ class Layer < ApplicationRecord
   has_many :customers
   has_many :subscriptions
   has_many :pricing_tables
+  has_many :tokens
 
   enum :status, STATUSES_LIST.zip(STATUSES_LIST).to_h
+
+  after_create :generate_tokens
+
+  protected
+
+  def generate_tokens
+    tokens.create!(kind: 'secret')
+  end
 end

@@ -40,3 +40,7 @@
 /node_modules
 .docker/volumes/*
 
+
+/config/credentials/development.key
+
+/config/credentials/test.key
