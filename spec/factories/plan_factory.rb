@@ -19,7 +19,7 @@
 #  index_plans_on_discarded_at  (discarded_at)
 #
 FactoryBot.define do
-  factory :plan do
+  factory :base_plan, class: 'Plan' do
     layer
     code { 'silver_monthly' }
     name { 'Silver Monthly' }
@@ -31,9 +31,19 @@ FactoryBot.define do
       plan.current_version_id = SecureRandom.uuid if plan.plan_versions.empty?
     end
 
-    after(:create) do |plan|
-      if plan.plan_versions.empty?
-        create(:plan_version, id: plan.current_version_id, plan: plan)
+    factory :plan_without_prices, class: 'Plan' do
+      after(:create) do |plan|
+        if plan.plan_versions.empty?
+          create(:plan_version_without_prices, id: plan.current_version_id, plan: plan)
+        end
+      end
+    end
+
+    factory :plan do
+      after(:create) do |plan|
+        if plan.plan_versions.empty?
+          create(:plan_version, id: plan.current_version_id, plan: plan)
+        end
       end
     end
   end

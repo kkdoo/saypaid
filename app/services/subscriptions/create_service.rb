@@ -28,6 +28,7 @@ class Subscriptions::CreateService < BaseService
       @subscription_version.save!
     end
 
+    @subscription.activate! if @subscription.may_activate?
     @subscription
   end
 

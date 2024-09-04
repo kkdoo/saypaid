@@ -64,9 +64,7 @@ RSpec.describe RootApi, type: :request do
         end
 
         context 'due to plan do not have any price' do
-          before do
-            plan.current_version.prices.destroy_all
-          end
+          let(:plan) { create(:plan_without_prices, layer:) }
 
           it 'return error that plan was not found' do
             expect do

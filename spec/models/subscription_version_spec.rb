@@ -15,10 +15,18 @@
 #  plan_version_id      :uuid             not null
 #  subscription_id      :uuid             not null
 #
-class SubscriptionVersion < ApplicationRecord
-  belongs_to :subscription
-  belongs_to :plan_version
-  has_one :plan, through: :plan_version
+require 'rails_helper'
 
-  validates :start_at, :current_period_start, :current_period_end, presence: true
+RSpec.describe SubscriptionVersion, type: :model do
+  describe 'associations' do
+    it { should belong_to(:subscription) }
+    it { should belong_to(:plan_version) }
+    it { should have_one(:plan).through(:plan_version) }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of(:start_at) }
+    it { should validate_presence_of(:current_period_start) }
+    it { should validate_presence_of(:current_period_end) }
+  end
 end
