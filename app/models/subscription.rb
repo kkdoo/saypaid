@@ -110,7 +110,7 @@ class Subscription < ApplicationRecord
   end
 
   def process_pending
-    # TODO: create invoice
+    Invoices::CreateService.new(self, finalize: true).call
   end
 
   def notify_event_start

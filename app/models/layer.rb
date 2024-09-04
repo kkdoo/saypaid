@@ -26,6 +26,7 @@ class Layer < ApplicationRecord
   has_many :subscriptions
   has_many :pricing_tables
   has_many :tokens
+  has_many :invoices
 
   enum :status, STATUSES_LIST.zip(STATUSES_LIST).to_h
 

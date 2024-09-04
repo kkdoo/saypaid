@@ -25,6 +25,7 @@ RSpec.describe Layer, type: :model do
     it { should have_many(:subscriptions) }
     it { should have_many(:pricing_tables) }
     it { should have_many(:tokens) }
+    it { should have_many(:invoices) }
   end
 
   describe 'enums' do
