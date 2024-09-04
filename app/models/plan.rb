@@ -19,7 +19,7 @@
 #  index_plans_on_discarded_at  (discarded_at)
 #
 class Plan < ApplicationRecord
-  include Discard::Model
+  include Discarded
 
   belongs_to :layer
   belongs_to :currency
@@ -29,6 +29,8 @@ class Plan < ApplicationRecord
   has_many :prices, through: :current_version
 
   enum :interval, { day: 0, week: 1, month: 2, year: 3 }
+
+  validates :code, :interval, :interval_count, presence: true
 
   def interval_length
     interval_count.public_send(interval)

@@ -9,6 +9,6 @@
 #
 class PlanVersion < ApplicationRecord
   belongs_to :plan
-  has_many :subscription_versions
+  has_many :subscription_versions, -> { order(created_at: :desc) }
   has_many :prices, class_name: "Prices::Base"
 end
