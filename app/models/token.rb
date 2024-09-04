@@ -28,6 +28,8 @@ class Token < ApplicationRecord
 
   enum :kind, { secret: 0, publishable: 1 }
 
+  scope :not_expired, -> { where('expired_at IS NULL OR expired_at > ?', Time.current) }
+
   validates :key, :kind, presence: true
   validates :key, uniqueness: { conditions: -> { where(discarded_at: nil) } }
 end

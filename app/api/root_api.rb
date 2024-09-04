@@ -1,16 +1,15 @@
 class RootApi < Grape::API
-  http_basic do |token|
-    # TODO: use api key here, but now we use just account id
-    @layer = Layer.find_by(id: token)
-    unless @layer
-      error!({ status: 401, message: "Unauthorized" }, 401)
-    end
-    true
-  end
+  Grape::Middleware::Auth::Strategies.add(:auth_token, ::Middleware::AuthTokenMiddleware)
+
+  auth :auth_token
 
   helpers do
+    def current_token
+      @current_token ||= env['current_token']
+    end
+
     def current_layer
-      @layer
+      @current_layer ||= current_token.layer
     end
 
     def permitted_params

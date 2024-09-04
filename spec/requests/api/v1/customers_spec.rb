@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe RootApi, type: :request do
   let(:layer) { create(:layer) }
+  let(:token) { layer.tokens.secret.first }
 
   context 'POST /customers' do
     let(:params) { attributes_for(:customer) }
@@ -11,7 +12,7 @@ RSpec.describe RootApi, type: :request do
     include_examples 'authenticate'
 
     context 'when logged in' do
-      let(:headers) { auth_with(layer.id) }
+      let(:headers) { auth_with(token.key) }
 
       it 'create customer' do
         expect do
