@@ -88,6 +88,10 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
+    database_cleaner-active_record (2.2.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -330,6 +334,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   cssbundling-rails
+  database_cleaner-active_record
   debug
   discard
   factory_bot_rails

@@ -16,7 +16,7 @@
 #  index_layers_on_discarded_at  (discarded_at)
 #
 class Layer < ApplicationRecord
-  include Discard::Model
+  include Discarded
 
   STATUSES_LIST = %w[draft active disabled].freeze
 

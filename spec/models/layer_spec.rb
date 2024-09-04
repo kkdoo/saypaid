@@ -26,15 +26,16 @@ RSpec.describe Layer, type: :model do
     it { should have_many(:pricing_tables) }
   end
 
-  describe 'db' do
-    include_examples "have column #discarded_at"
-  end
-
   describe 'enums' do
     it do
       should define_enum_for(:status).
         with_values(draft: 'draft', active: 'active', disabled: 'disabled').
         backed_by_column_of_type(:string)
     end
+  end
+
+  describe 'works with discarded' do
+    let(:factory_name) { :layer }
+    it_behaves_like 'discarded'
   end
 end

@@ -13,7 +13,7 @@
 #  index_accounts_on_discarded_at  (discarded_at)
 #
 class Account < ApplicationRecord
-  include Discard::Model
+  include Discarded
 
   has_many :layers
   belongs_to :default_currency, class_name: "Currency"

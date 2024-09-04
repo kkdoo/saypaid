@@ -16,25 +16,23 @@
 #
 #  index_subscriptions_on_discarded_at  (discarded_at)
 #
-class Subscription < ApplicationRecord
-  include Discarded
+FactoryBot.define do
+  factory :subscription do
+    layer
+    customer
+    status { 'created' }
+    pay_in_advance { true }
 
-  belongs_to :layer
-  belongs_to :customer
-  has_many :subscription_versions, -> { order(created_at: :desc) }
-  belongs_to :current_version, class_name: "SubscriptionVersion", optional: true
+    before(:create) do |subscription|
+      if subscription.subscription_versions.empty?
+        subscription.current_version_id = SecureRandom.uuid
+      end
+    end
 
-  enum :status, {
-    created: 0,
-    trial: 1,
-    pending: 2,
-    active: 3,
-    incomplete: 4,
-    past_due: 5,
-    terminated: 6,
-    canceled: 7,
-    unpaid: 8,
-  }
-
-  validates :status, presence: true
+    after(:create) do |subscription|
+      if subscription.subscription_versions.empty?
+        create(:subscription_version, id: subscription.current_version_id, subscription: subscription)
+      end
+    end
+  end
 end

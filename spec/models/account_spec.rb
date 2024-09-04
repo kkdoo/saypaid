@@ -20,7 +20,8 @@ RSpec.describe Account, type: :model do
     it { should belong_to(:default_currency) }
   end
 
-  describe 'db' do
-    include_examples "have column #discarded_at"
+  describe 'works with discarded' do
+    let(:factory_name) { :account }
+    it_behaves_like 'discarded'
   end
 end
