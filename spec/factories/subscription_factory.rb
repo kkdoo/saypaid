@@ -4,6 +4,7 @@
 #
 #  id                 :uuid             not null, primary key
 #  discarded_at       :datetime
+#  is_active_now      :boolean          default(FALSE), not null
 #  pay_in_advance     :boolean          not null
 #  status             :integer          default("created"), not null
 #  created_at         :datetime         not null

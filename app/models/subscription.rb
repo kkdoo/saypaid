@@ -4,6 +4,7 @@
 #
 #  id                 :uuid             not null, primary key
 #  discarded_at       :datetime
+#  is_active_now      :boolean          default(FALSE), not null
 #  pay_in_advance     :boolean          not null
 #  status             :integer          default("created"), not null
 #  created_at         :datetime         not null
@@ -44,20 +45,20 @@ class Subscription < ApplicationRecord
     state :trial, :pending, :active, :incomplete, :past_due, :terminated, :canceled, :unpaid
 
     event :activate, guard: :time_to_start?, success: :notify_event_start do
-      transitions from: :created, to: :trial, guard: :time_to_trial?
-      transitions from: [:created, :trial], to: :pending, guard: :required_charge?, after: :process_pending
-      transitions from: [:created, :trial], to: :active
+      transitions from: [:created], to: :trial, guard: :time_to_trial?, after: :on_trial
+      transitions from: [:created, :trial], to: :pending, guard: :required_charge?, after: :on_pending
+      transitions from: [:created, :trial], to: :active, after: :on_active
     end
 
     event :paid do
-      transitions from: :pending, to: :active
+      transitions from: :pending, to: :active, after: :on_active
     end
 
     event :terminate, guard: :is_terminated_now? do
       transitions from: [:created, :trial, :pending, :active, :incomplete, :past_due, :unpaid],
-                  to: :canceled, guard: :is_canceled?
+                  to: :canceled, guard: :is_canceled?, after: :on_canceled
       transitions from: [:created, :trial, :pending, :active, :incomplete, :past_due, :unpaid],
-                  to: :terminated
+                  to: :terminated, after: :on_terminated
     end
   end
 
@@ -109,9 +110,23 @@ class Subscription < ApplicationRecord
       (current_version.terminate_at ? time >= current_version.terminate_at : false)
   end
 
-  def process_pending
+  def on_trial
+    self.is_active_now = true
+  end
+
+  def on_pending
+    self.is_active_now = true
     Invoices::CreateService.new(self, finalize: true).call
   end
+
+  def on_active
+    self.is_active_now = true
+  end
+
+  def on_terminated
+    self.is_active_now = false
+  end
+  alias_method :on_canceled, :on_terminated
 
   def notify_event_start
     # TODO: notify subscription.start
