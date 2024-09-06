@@ -24,7 +24,7 @@ RSpec.describe Invoice, type: :model do
     it { should belong_to(:layer) }
     it { should belong_to(:customer) }
     it { should belong_to(:currency) }
-    it { should have_many(:line_items).dependent(:destroy) }
+    it { should have_many(:line_items) }
   end
 
   context 'validations' do

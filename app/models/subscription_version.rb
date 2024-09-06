@@ -22,4 +22,9 @@ class SubscriptionVersion < ApplicationRecord
   has_many :line_items
 
   validates :start_at, :current_period_start, :current_period_end, presence: true
+
+  def current_period_expired?
+    time = Time.current
+    time >= current_period_end || (terminate_at ? time >= terminate_at : false)
+  end
 end

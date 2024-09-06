@@ -98,7 +98,7 @@ RSpec.describe Subscriptions::CreateService do
         let(:expected_status) { 'pending' }
 
         before do
-          expect_any_instance_of(Subscription).to receive(:process_pending)
+          expect_any_instance_of(Invoices::CreateService).to receive(:call)
         end
 
         include_examples 'create subscription'
@@ -109,7 +109,7 @@ RSpec.describe Subscriptions::CreateService do
         let(:expected_status) { 'pending' }
 
         before do
-          expect_any_instance_of(Subscription).to receive(:process_pending)
+          expect_any_instance_of(Invoices::CreateService).to receive(:call)
         end
 
         include_examples 'create subscription'

@@ -40,6 +40,33 @@ class Subscription < ApplicationRecord
 
   validates :status, presence: true
 
+  scope :is_active, -> { where(is_active_now: true) }
+  scope :is_not_active, -> { where(is_active_now: false) }
+
+  scope :ready_to_start, -> {
+    is_not_active.created.or(Subscription.trial).
+      joins(:current_version).
+      where(SubscriptionVersion.arel_table[:start_at].lteq(Time.current))
+  }
+
+  scope :trial_is_ended, -> {
+    is_active.trial.
+      joins(:current_version).
+      where(SubscriptionVersion.arel_table[:trial_end].lteq(Time.current))
+  }
+
+  scope :terminated_now, -> {
+    is_active.active.or(Subscription.is_active.trial).
+      joins(:current_version).
+      where(SubscriptionVersion.arel_table[:terminate_at].lteq(Time.current))
+  }
+
+  scope :ready_for_next_period, -> {
+    is_active.
+      joins(:current_version).
+      where(SubscriptionVersion.arel_table[:current_period_end].lteq(Time.current))
+  }
+
   aasm column: :status, enum: true, whiny_persistence: true do
     state :created, initial: true
     state :trial, :pending, :active, :incomplete, :past_due, :terminated, :canceled, :unpaid
