@@ -27,6 +27,7 @@ class Subscriptions::CreateService < BaseService
       calc_periods
       @subscription_version.save!
     end
+    Events::CreateService.new(@subscription.layer, name: 'subscriptions.create', object: @subscription).call
 
     Subscriptions::ActivateService.new(@subscription).call
     @subscription

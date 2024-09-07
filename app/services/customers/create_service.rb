@@ -5,7 +5,9 @@ class Customers::CreateService < BaseService
   end
 
   def call
-    @layer.customers.create!(customer_params)
+    @customer = @layer.customers.create!(customer_params)
+    Events::CreateService.new(@customer.layer, name: 'customers.create', object: @customer).call
+    @customer
   end
 
   protected

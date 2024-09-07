@@ -22,6 +22,9 @@ class Invoices::CreateService < BaseService
       @invoice.status = Invoice.statuses[:open]
     end
     @invoice.save!
+
+    Events::CreateService.new(@invoice.layer, name: 'customers.create', object: @invoice).call
+
     @invoice
   end
 

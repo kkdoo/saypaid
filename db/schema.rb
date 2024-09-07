@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_06_091141) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_07_111951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -36,6 +36,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_06_091141) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["discarded_at"], name: "index_customers_on_discarded_at"
+  end
+
+  create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "layer_id", null: false
+    t.string "object_type", null: false
+    t.integer "status", default: 0, null: false
+    t.text "data", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -167,5 +177,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_06_091141) do
     t.datetime "updated_at", null: false
     t.index ["discarded_at"], name: "index_tokens_on_discarded_at"
     t.index ["key"], name: "index_tokens_on_key", unique: true, where: "(discarded_at IS NULL)"
+  end
+
+  create_table "webhook_endpoints", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "layer_id", null: false
+    t.string "url", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_webhook_endpoints_on_discarded_at"
+  end
+
+  create_table "webhook_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "event_id", null: false
+    t.uuid "webhook_endpoint_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

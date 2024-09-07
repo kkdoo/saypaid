@@ -66,6 +66,10 @@ class Subscription < ApplicationRecord
       where(SubscriptionVersion.arel_table[:current_period_end].lteq(Time.current))
   }
 
+  def object_type
+    'subscription'
+  end
+
   def required_charge?
     pay_in_advance && charge_amount > 0
   end

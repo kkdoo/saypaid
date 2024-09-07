@@ -27,6 +27,8 @@ class Layer < ApplicationRecord
   has_many :pricing_tables
   has_many :tokens
   has_many :invoices
+  has_many :events
+  has_many :webhook_endpoints
 
   enum :status, STATUSES_LIST.zip(STATUSES_LIST).to_h
 

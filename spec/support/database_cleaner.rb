@@ -4,6 +4,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation, except: %w[currencies])
+    Rails.application.load_seed
   end
 
   config.around(:each) do |example|

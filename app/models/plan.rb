@@ -35,4 +35,8 @@ class Plan < ApplicationRecord
   def interval_length
     interval_count.public_send(interval)
   end
+
+  def object_type
+    'plan'
+  end
 end

@@ -39,4 +39,8 @@ class Invoice < ApplicationRecord
   after_discard do
     line_items.discard_all! if line_items.count > 0
   end
+
+  def object_type
+    'invoice'
+  end
 end

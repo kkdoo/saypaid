@@ -19,4 +19,8 @@ class Customer < ApplicationRecord
 
   belongs_to :layer
   has_many :subscriptions
+
+  def object_type
+    'customer'
+  end
 end
