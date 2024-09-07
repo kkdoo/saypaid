@@ -67,38 +67,6 @@ class Subscription < ApplicationRecord
       where(SubscriptionVersion.arel_table[:current_period_end].lteq(Time.current))
   }
 
-  aasm column: :status, enum: true, whiny_persistence: true do
-    state :created, initial: true
-    state :trial, :pending, :active, :incomplete, :past_due, :terminated, :canceled, :unpaid
-
-    event :activate, guard: :time_to_start?, success: :notify_event_start do
-      transitions from: [:created], to: :trial, guard: :time_to_trial?, after: :on_trial
-      transitions from: [:created, :trial], to: :pending, guard: :required_charge?, after: :on_pending
-      transitions from: [:created, :trial], to: :active, after: :on_active
-    end
-
-    event :paid do
-      transitions from: :pending, to: :active, after: :on_active
-    end
-
-    event :terminate, guard: :is_terminated_now? do
-      transitions from: [:created, :trial, :pending, :active, :incomplete, :past_due, :unpaid],
-                  to: :canceled, guard: :is_canceled?, after: :on_canceled
-      transitions from: [:created, :trial, :pending, :active, :incomplete, :past_due, :unpaid],
-                  to: :terminated, after: :on_terminated
-    end
-  end
-
-  def time_to_start?
-    time = Time.current
-    current_version.start_at <= time && time < current_version.current_period_end
-  end
-
-  def time_to_trial?
-    time = Time.current
-    current_version.trial_end && time < current_version.trial_end && time_to_start?
-  end
-
   def required_charge?
     pay_in_advance && charge_amount > 0
   end
@@ -122,48 +90,9 @@ class Subscription < ApplicationRecord
     %w(created trial pending active incomplete past_due unpaid).include?(status.to_s)
   end
 
-  def is_canceled?
-    current_version.cancelation_time.present?
-  end
-
-  def is_terminated_now?
-    return false if current_version.terminate_at.nil?
-    current_version.terminate_at <= Time.current
-  end
-
   def current_period_expired?
     time = Time.current
     time >= current_version.current_period_end ||
       (current_version.terminate_at ? time >= current_version.terminate_at : false)
-  end
-
-  def on_trial
-    self.is_active_now = true
-  end
-
-  def on_pending
-    self.is_active_now = true
-    Invoices::CreateService.new(self, finalize: true).call
-  end
-
-  def on_active
-    self.is_active_now = true
-  end
-
-  def on_terminated
-    self.is_active_now = false
-  end
-  alias_method :on_canceled, :on_terminated
-
-  def notify_event_start
-    # TODO: notify subscription.start
-  end
-
-  def notify_event_next_period
-    # TODO: notify subscription.next_period
-  end
-
-  def create_event_on_change
-    # TODO: notify subscription.updated
   end
 end

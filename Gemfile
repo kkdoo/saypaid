@@ -40,7 +40,6 @@ gem "foreman"
 gem "discard"
 gem "grape"
 gem "grape-entity"
-gem "aasm"
 gem "sidekiq"
 
 group :development, :test do
