@@ -18,7 +18,6 @@
 #  index_subscriptions_on_discarded_at  (discarded_at)
 #
 class Subscription < ApplicationRecord
-  include AASM
   include Discarded
 
   belongs_to :layer

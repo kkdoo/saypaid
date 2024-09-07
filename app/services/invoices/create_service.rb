@@ -19,16 +19,19 @@ class Invoices::CreateService < BaseService
       amount: @subscription.amount,
     )
     if finalize_invoice?
-      @invoice.finalize!
-    else
-      @invoice.save!
+      @invoice.status = Invoice.statuses[:open]
     end
+    @invoice.save!
     @invoice
   end
 
   protected
 
   def finalize_invoice?
-    @finalize && @invoice.may_finalize?
+    @finalize && can_be_finalized?
+  end
+
+  def can_be_finalized?
+    @invoice.draft?
   end
 end

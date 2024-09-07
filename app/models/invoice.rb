@@ -20,7 +20,6 @@
 class Invoice < ApplicationRecord
   MAX_DUE_LENGTH = 3.days
 
-  include AASM
   include Discarded
 
   belongs_to :layer
@@ -39,23 +38,5 @@ class Invoice < ApplicationRecord
 
   after_discard do
     line_items.discard_all! if line_items.count > 0
-  end
-
-  aasm column: :status, enum: true, whiny_persistence: true do
-    state :draft, initial: true
-    state :open, :paid_fully, :voided
-
-    event :finalize do
-      transitions from: :draft, to: :open
-    end
-
-    event :paid do
-      transitions from: :open, to: :paid_fully
-    end
-
-    event :void do
-      transitions from: [:draft], to: :voided, after: :discard!
-      transitions from: [:open], to: :voided
-    end
   end
 end
