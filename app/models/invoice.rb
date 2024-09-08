@@ -26,7 +26,7 @@ class Invoice < ApplicationRecord
   belongs_to :customer
   belongs_to :currency
   has_many :line_items
-  has_many :subscriptions, through: :line_items, source: :subscription_version
+  has_many :subscription_versions, through: :line_items, source: :subscription_version
 
   enum :status, { draft: 0, open: 1, paid_fully: 2, voided: 3 }
 

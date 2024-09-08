@@ -5,15 +5,21 @@ class Invoices::MarkAsPaidService < BaseService
   end
 
   def call
-    if @invoice.may_paid?
-      ActiveRecord::Base.transaction do
-        @invoice.paid!
-        @invoice.subscriptions.each do |subscription|
-          subscription.paid!
-        end
+    return false unless can_be_paid?
+
+    ActiveRecord::Base.transaction do
+      @invoice.paid_fully!
+      @invoice.subscription_versions.find_each do |sub_version|
+        Subscriptions::MarkAsPaidService.new(sub_version.subscription, @invoice).call
       end
     end
 
     @invoice
+  end
+
+  protected
+
+  def can_be_paid?
+    @invoice.open?
   end
 end

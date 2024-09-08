@@ -1,6 +1,7 @@
 class Subscriptions::MarkAsPaidService
-  def initialize(subscription)
+  def initialize(subscription, invoice)
     @subscription = subscription
+    @invoice = invoice
   end
 
   def call
@@ -14,12 +15,13 @@ class Subscriptions::MarkAsPaidService
     @subscription
   end
 
+  protected
+
   def can_be_active?
     @subscription.pending? && invoice_paid_fully?
   end
 
   def invoice_paid_fully?
-    # TODO: check invoice for payments
-    true
+    @invoice.paid_fully?
   end
 end
