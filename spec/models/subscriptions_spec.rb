@@ -5,7 +5,10 @@ RSpec.describe Subscription, type: :model do
     it { should belong_to(:layer) }
     it { should belong_to(:customer) }
     it { should belong_to(:current_version).class_name("SubscriptionVersion").optional }
-    it { should have_many(:subscription_versions).order(created_at: :desc) }
+    it do
+      should have_many(:subscription_versions).order(created_at: :desc).
+        inverse_of(:subscription)
+    end
   end
 
   describe 'validations' do

@@ -13,7 +13,7 @@ RSpec.describe RootApi, type: :request do
       {
         customer_id: customer_id,
         plan_code: plan_code,
-        start_at: Time.now.to_fs,
+        start_at: Time.current.to_fs,
         pay_in_advance: true,
       }
     end

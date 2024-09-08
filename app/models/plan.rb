@@ -23,7 +23,7 @@ class Plan < ApplicationRecord
 
   belongs_to :layer
   belongs_to :currency
-  has_many :plan_versions, -> { order(created_at: :desc) }
+  has_many :plan_versions, -> { order(created_at: :desc) }, inverse_of: :plan
   belongs_to :current_version, class_name: "PlanVersion", optional: true
   has_many :pricing_cards
   has_many :prices, through: :current_version
@@ -37,6 +37,6 @@ class Plan < ApplicationRecord
   end
 
   def object_type
-    'plan'
+    "plan"
   end
 end

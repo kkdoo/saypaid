@@ -5,14 +5,14 @@ class Middleware::AuthTokenMiddleware < Grape::Middleware::Auth::Base
     if decoded_token.presence
       # NOTE: only secret token now allowed
       @current_token = Token.not_expired.secret.find_by(key: decoded_token)
-      @current_token.touch(:last_used_at) if @current_token
+      @current_token.update(last_used_at: Time.current) if @current_token
     end
     return error!({ status: 401, message: "Unauthorized" }, 401) unless @current_token
 
-    env['current_token'] = @current_token
+    env["current_token"] = @current_token
     status, headers, body = app.call(env)
 
-    [status, headers, body]
+    [ status, headers, body ]
   end
 
   protected
@@ -21,12 +21,12 @@ class Middleware::AuthTokenMiddleware < Grape::Middleware::Auth::Base
     Rack::Response.new(
       body.to_json,
       status,
-      { 'Content-Type' => 'application/json' }
+      { "Content-Type" => "application/json" }
     )
   end
 
   def auth_param
-    @env['HTTP_AUTHORIZATION'].to_s.split(" ", 2).second
+    @env["HTTP_AUTHORIZATION"].to_s.split(" ", 2).second
   end
 
   def decode_credentials

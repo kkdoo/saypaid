@@ -54,7 +54,7 @@ class Subscriptions::StartNextPeriodService
   def create_event
     Events::CreateService.new(
       @subscription.layer,
-      name: 'subscriptions.new_period',
+      name: "subscriptions.new_period",
       object: @subscription
     ).call
   end

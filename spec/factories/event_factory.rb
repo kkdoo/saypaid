@@ -16,6 +16,6 @@ FactoryBot.define do
     layer
     name { 'customers.create' }
     object_type { 'customer' }
-    data { {id: 'some_id'}.to_json }
+    data { { id: 'some_id' }.to_json }
   end
 end

@@ -1,6 +1,6 @@
 RSpec.shared_examples 'discarded' do
   let!(:subject) { create(factory_name) }
-  let!(:discarded) { create(factory_name, discarded_at: Time.now) }
+  let!(:discarded) { create(factory_name, discarded_at: Time.current) }
   let!(:list) { create_list(factory_name, 2) }
 
   describe "#discarded_at" do

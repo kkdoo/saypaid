@@ -22,7 +22,7 @@ class Subscription < ApplicationRecord
 
   belongs_to :layer
   belongs_to :customer
-  has_many :subscription_versions, -> { order(created_at: :desc) }
+  has_many :subscription_versions, -> { order(created_at: :desc) }, inverse_of: :subscription
   belongs_to :current_version, class_name: "SubscriptionVersion", optional: true
 
   enum :status, {
@@ -67,7 +67,7 @@ class Subscription < ApplicationRecord
   }
 
   def object_type
-    'subscription'
+    "subscription"
   end
 
   def required_charge?

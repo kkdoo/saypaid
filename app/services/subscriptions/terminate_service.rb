@@ -53,7 +53,7 @@ class Subscriptions::TerminateService
   def create_event
     Events::CreateService.new(
       @subscription.layer,
-      name: 'subscriptions.terminated',
+      name: "subscriptions.terminated",
       object: @subscription
     ).call
   end

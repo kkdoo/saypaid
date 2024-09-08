@@ -5,7 +5,7 @@ class RootApi < Grape::API
 
   helpers do
     def current_token
-      @current_token ||= env['current_token']
+      @current_token ||= env["current_token"]
     end
 
     def current_layer
@@ -26,12 +26,12 @@ class RootApi < Grape::API
   end
 
   rescue_from ActiveRecord::RecordInvalid do |error|
-    pp error
-    puts error.backtrace.join("\n\t")
+    Rails.logger.debug error
+    Rails.logger.debug error.backtrace.join("\n\t")
     message = error.record.errors.full_messages.join(", ")
     error!({ status: 400, message: }, 400)
   end
 
-  mount V1::CustomersApi => '/'
-  mount V1::SubscriptionsApi => '/'
+  mount V1::CustomersApi => "/"
+  mount V1::SubscriptionsApi => "/"
 end

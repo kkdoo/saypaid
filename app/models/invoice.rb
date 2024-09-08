@@ -41,6 +41,6 @@ class Invoice < ApplicationRecord
   end
 
   def object_type
-    'invoice'
+    "invoice"
   end
 end

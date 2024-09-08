@@ -6,3 +6,27 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
+
+inherit_mode:
+  merge:
+    - Exclude
+
+Rails:
+  Enabled: true
+
+AllCops:
+  Exclude:
+    - "db/**/*"
+    - "config/**/*"
+    - "script/**/*"
+    - "bin/{rails,rake}"
+    - "lib/tasks/auto_annotate_models.rake"
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false

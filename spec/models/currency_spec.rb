@@ -10,7 +10,10 @@ require 'rails_helper'
 
 RSpec.describe Currency, type: :model do
   describe 'associations' do
-    it { should have_many(:accounts).with_foreign_key('default_currency_id') }
+    it do
+      should have_many(:accounts).with_foreign_key('default_currency_id').
+        inverse_of(:default_currency)
+    end
     it { should have_many(:plans) }
     it { should have_many(:invoices) }
   end

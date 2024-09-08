@@ -21,18 +21,11 @@
 require 'rails_helper'
 
 RSpec.describe Plan, type: :model do
-  #belongs_to :layer
-  #belongs_to :currency
-  #has_many :plan_versions, -> { order(created_at: :desc) }
-  #belongs_to :current_version, class_name: "PlanVersion", optional: true
-  #has_many :pricing_cards
-  #has_many :prices, through: :current_version
-
   describe 'associations' do
     it { should belong_to(:layer) }
     it { should belong_to(:currency) }
     it { should belong_to(:current_version).class_name("PlanVersion").optional }
-    it { should have_many(:plan_versions).order(created_at: :desc) }
+    it { should have_many(:plan_versions).order(created_at: :desc).inverse_of(:plan) }
     it { should have_many(:pricing_cards) }
     it { should have_many(:prices).through(:current_version) }
   end

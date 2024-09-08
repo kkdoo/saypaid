@@ -23,7 +23,7 @@ class Invoices::CreateService < BaseService
     end
     @invoice.save!
 
-    Events::CreateService.new(@invoice.layer, name: 'customers.create', object: @invoice).call
+    Events::CreateService.new(@invoice.layer, name: "customers.create", object: @invoice).call
 
     @invoice
   end

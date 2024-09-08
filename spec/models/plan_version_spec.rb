@@ -12,7 +12,10 @@ require 'rails_helper'
 RSpec.describe PlanVersion, type: :model do
   describe 'associations' do
     it { should belong_to(:plan) }
-    it { should have_many(:subscription_versions).order(created_at: :desc) }
+    it do
+      should have_many(:subscription_versions).order(created_at: :desc).
+        inverse_of(:plan_version)
+    end
     it { should have_many(:prices).class_name('Prices::Base') }
   end
 end

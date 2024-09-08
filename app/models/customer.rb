@@ -21,6 +21,6 @@ class Customer < ApplicationRecord
   has_many :subscriptions
 
   def object_type
-    'customer'
+    "customer"
   end
 end

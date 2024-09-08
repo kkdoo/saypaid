@@ -37,6 +37,6 @@ class Layer < ApplicationRecord
   protected
 
   def generate_tokens
-    tokens.create!(kind: 'secret')
+    tokens.create!(kind: "secret")
   end
 end
