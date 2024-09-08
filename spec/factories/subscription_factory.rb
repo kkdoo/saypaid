@@ -18,21 +18,38 @@
 #  index_subscriptions_on_discarded_at  (discarded_at)
 #
 FactoryBot.define do
-  factory :subscription do
+  factory :base_subscription, class: 'Subscription' do
     layer
     customer
     status { 'created' }
     pay_in_advance { true }
 
-    before(:create) do |subscription|
-      if subscription.subscription_versions.empty?
-        subscription.current_version_id = SecureRandom.uuid
-      end
-    end
+    factory :subscription do
+      layer
+      customer
+      status { 'created' }
+      pay_in_advance { true }
 
-    after(:create) do |subscription|
-      if subscription.subscription_versions.empty?
-        create(:subscription_version, id: subscription.current_version_id, subscription: subscription)
+      before(:create) do |subscription|
+        if subscription.subscription_versions.empty?
+          subscription.current_version_id = SecureRandom.uuid
+        end
+      end
+
+      after(:create) do |subscription|
+        if subscription.subscription_versions.empty?
+          create(:subscription_version, id: subscription.current_version_id, subscription: subscription)
+        end
+      end
+
+      trait :active do
+        status { 'active' }
+        is_active_now { true }
+      end
+
+      trait :trial do
+        status { 'trial' }
+        is_active_now { true }
       end
     end
   end

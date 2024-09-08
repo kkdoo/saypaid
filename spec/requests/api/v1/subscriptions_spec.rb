@@ -44,9 +44,11 @@ RSpec.describe RootApi, type: :request do
               do_request
             end.to_not change { layer.subscriptions.count }
 
-            expect(response.status).to eq(400)
-            expect(body_json['status']).to eq(400)
-            expect(body_json['message']).to eq('Customer not found')
+            aggregate_failures do
+              expect(response.status).to eq(400)
+              expect(body_json['status']).to eq(400)
+              expect(body_json['message']).to eq('Customer not found')
+            end
           end
         end
 
@@ -58,9 +60,11 @@ RSpec.describe RootApi, type: :request do
               do_request
             end.to_not change { layer.subscriptions.count }
 
-            expect(response.status).to eq(400)
-            expect(body_json['status']).to eq(400)
-            expect(body_json['message']).to eq('Plan not found')
+            aggregate_failures do
+              expect(response.status).to eq(400)
+              expect(body_json['status']).to eq(400)
+              expect(body_json['message']).to eq('Plan not found')
+            end
           end
         end
 
@@ -72,9 +76,11 @@ RSpec.describe RootApi, type: :request do
               do_request
             end.to_not change { layer.subscriptions.count }
 
-            expect(response.status).to eq(400)
-            expect(body_json['status']).to eq(400)
-            expect(body_json['message']).to eq('Plan should have at least one price')
+            aggregate_failures do
+              expect(response.status).to eq(400)
+              expect(body_json['status']).to eq(400)
+              expect(body_json['message']).to eq('Plan should have at least one price')
+            end
           end
         end
       end

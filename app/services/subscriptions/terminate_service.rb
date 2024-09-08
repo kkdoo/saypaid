@@ -16,6 +16,8 @@ class Subscriptions::TerminateService
     @subscription
   end
 
+  protected
+
   def can_be_terminated?
     have_terminateion_time? && in_valid_for_termination_state? && time_to_terminate?
   end
