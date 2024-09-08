@@ -13,7 +13,7 @@
 #
 class Event < ApplicationRecord
   belongs_to :layer
-  has_many :webhook_events, dependent: :destroy
+  has_many :webhook_events
   has_many :webhook_endpoints, through: :webhook_events
 
   enum :status, { pending: 0, done: 1, failed: 2 }
@@ -21,4 +21,12 @@ class Event < ApplicationRecord
   validates :data, :name, :object_type, :status, presence: true
 
   scope :ordered, -> { order(created_at: :desc, name: :asc) }
+
+  after_commit :deliver_to_webhook_endpoints, on: :create
+
+  protected
+
+  def deliver_to_webhook_endpoints
+    DeliverEventJob.perform_async(id)
+  end
 end
