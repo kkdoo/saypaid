@@ -13,6 +13,8 @@ class Subscriptions::TerminateService
       is_active_now: false,
     )
 
+    create_event
+
     @subscription
   end
 
@@ -44,5 +46,13 @@ class Subscriptions::TerminateService
     else
       Subscription.statuses[:terminated]
     end
+  end
+
+  def create_event
+    Events::CreateService.new(
+      @subscription.layer,
+      name: 'subscriptions.terminated',
+      object: @subscription
+    ).call
   end
 end

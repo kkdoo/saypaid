@@ -21,6 +21,16 @@ RSpec.describe Subscriptions::TerminateService do
 
         expect(subscription.is_active_now).to eq(false)
       end
+
+      it 'create subscriptions.terminate event' do
+        event_create_service = double('events:create')
+        expect(event_create_service).to receive(:call)
+        expect(Events::CreateService).to receive(:new).
+          with(layer, name: 'subscriptions.terminated', object: subscription).
+          and_return(event_create_service)
+
+        service.call
+      end
     end
 
     shared_examples 'skip termination' do
@@ -28,6 +38,12 @@ RSpec.describe Subscriptions::TerminateService do
         expect {
           expect(service.call).to eq(false)
         }.to_not change { subscription.attributes }
+      end
+
+      it 'skip event creation' do
+        expect(Events::CreateService).to_not receive(:new)
+
+        service.call
       end
     end
 
