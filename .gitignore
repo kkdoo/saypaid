@@ -44,3 +44,4 @@
 /config/credentials/development.key
 
 /config/credentials/test.key
+coverage
