@@ -88,14 +88,4 @@ class Subscription < ApplicationRecord
     end
     @amount
   end
-
-  def can_be_terminated?
-    %w(created trial pending active incomplete past_due unpaid).include?(status.to_s)
-  end
-
-  def current_period_expired?
-    time = Time.current
-    time >= current_version.current_period_end ||
-      (current_version.terminate_at ? time >= current_version.terminate_at : false)
-  end
 end

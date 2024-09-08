@@ -4,8 +4,6 @@ class Subscriptions::TerminateService
   end
 
   def call
-    @current_version = @subscription.current_version
-
     return false unless can_be_terminated?
 
     @subscription.update!(
@@ -18,10 +16,14 @@ class Subscriptions::TerminateService
     @subscription
   end
 
-  protected
-
   def can_be_terminated?
     have_terminateion_time? && in_valid_for_termination_state? && time_to_terminate?
+  end
+
+  protected
+
+  def current_version
+    @current_version ||= @subscription.current_version
   end
 
   def in_valid_for_termination_state?
@@ -29,15 +31,15 @@ class Subscriptions::TerminateService
   end
 
   def have_terminateion_time?
-    !!@current_version.terminate_at
+    !!current_version.terminate_at
   end
 
   def time_to_terminate?
-    @current_version.terminate_at <= Time.current
+    current_version.terminate_at <= Time.current
   end
 
   def is_canceled_by_human?
-    @current_version.cancelation_time.present?
+    current_version.cancelation_time.present?
   end
 
   def new_subscription_status

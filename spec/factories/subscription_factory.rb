@@ -47,6 +47,11 @@ FactoryBot.define do
         is_active_now { true }
       end
 
+      trait :terminated do
+        status { 'terminated' }
+        is_active_now { false }
+      end
+
       trait :trial do
         status { 'trial' }
         is_active_now { true }
