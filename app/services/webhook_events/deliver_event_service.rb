@@ -1,4 +1,6 @@
-class WebhookEndpoints::DeliverEventService < BaseService
+class WebhookEvents::DeliverEventService < BaseService
+  class RequestWasDeclined < StandardError; end
+
   attr_reader :response
 
   def initialize(webhook_event)
@@ -8,27 +10,29 @@ class WebhookEndpoints::DeliverEventService < BaseService
   end
 
   def call
-    @webhook_event.skipped! unless can_be_delivered?
+    unless can_be_delivered?
+      @webhook_event.skipped!
+      return
+    end
 
     @webhook_event.sending!
 
-    do_request
+    @response = do_request
 
     if success_response?
       @webhook_event.accepted!
     else
       @webhook_event.declined!
-      DeliverEventToWebhookEndpointJob.perform_async(@webhook_event.id)
+      raise RequestWasDeclined
     end
-  rescue
+  rescue RequestWasDeclined => e
+    raise e
+  rescue => e
     @webhook_event.failed!
+    raise e
   end
 
   protected
-
-  def success_response?
-    response.status >= 200 && response < 300
-  end
 
   def can_be_delivered?
     @webhook_endpoint.enabled? && in_valid_status?
@@ -38,8 +42,12 @@ class WebhookEndpoints::DeliverEventService < BaseService
     %w[pending declined failed].include?(@webhook_event.status)
   end
 
+  def success_response?
+    response.status >= 200 && response.status < 300
+  end
+
   def do_request
-    @response ||= Excon.post(
+    Excon.post(
       @webhook_endpoint.url,
       body: @event.data,
       headers: { "Content-Type" => "application/json" })
