@@ -1,18 +1,13 @@
 # == Schema Information
 #
-# Table name: webhook_endpoints
+# Table name: webhook_events
 #
-#  id           :uuid             not null, primary key
-#  discarded_at :datetime
-#  status       :integer          default("enabled"), not null
-#  url          :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  layer_id     :uuid             not null
-#
-# Indexes
-#
-#  index_webhook_endpoints_on_discarded_at  (discarded_at)
+#  id                  :uuid             not null, primary key
+#  status              :integer          default("pending"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  event_id            :uuid             not null
+#  webhook_endpoint_id :uuid             not null
 #
 FactoryBot.define do
   factory :webhook_event do
