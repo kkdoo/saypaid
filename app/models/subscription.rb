@@ -43,7 +43,7 @@ class Subscription < ApplicationRecord
   scope :is_not_active, -> { where(is_active_now: false) }
 
   scope :ready_to_start, -> {
-    is_not_active.created.or(Subscription.trial).
+    is_not_active.created.
       joins(:current_version).
       where(SubscriptionVersion.arel_table[:start_at].lteq(Time.current))
   }
@@ -55,7 +55,7 @@ class Subscription < ApplicationRecord
   }
 
   scope :terminated_now, -> {
-    is_active.active.or(Subscription.is_active.trial).
+    is_active.
       joins(:current_version).
       where(SubscriptionVersion.arel_table[:terminate_at].lteq(Time.current))
   }

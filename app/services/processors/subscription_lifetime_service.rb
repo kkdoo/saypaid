@@ -4,11 +4,8 @@ class Processors::SubscriptionLifetimeService < BaseService
   end
 
   def call
-    Subscription.ready_to_start.find_each do |subscription|
-      Subscriptions::ActivateService.new(subscription).call
-    end
-    Subscription.trial_is_ended.find_each do |subscription|
-      Subscriptions::ActivateService.new(subscription).call
+    Subscription.ready_to_start.or(Subscription.trial_is_ended).find_each do |subscription|
+      Subscriptions::StartService.new(subscription).call
     end
     Subscription.terminated_now.find_each do |subscription|
       Subscriptions::TerminateService.new(subscription).call
