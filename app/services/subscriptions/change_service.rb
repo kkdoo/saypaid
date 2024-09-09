@@ -6,8 +6,14 @@ class Subscriptions::ChangeService
   end
 
   def call
-    if expect_plan_change? & not_terminated?
-      next_version = @subscription.subscription_versions.create!(
+    if @subscription.is_active_now? && expect_plan_change? & not_terminated?
+      if already_have_future_version?
+        @next_version = current_version.next
+      else
+        @next_version = @subscription.subscription_versions.build
+      end
+
+      @next_version.update!(
         prev_id: current_version.id,
         quantity: current_version.quantity,
         plan_version_id: @new_plan.current_version_id,
@@ -31,5 +37,9 @@ class Subscriptions::ChangeService
 
   def current_version
     @current_version ||= @subscription.current_version
+  end
+
+  def already_have_future_version?
+    current_version.next.present?
   end
 end
