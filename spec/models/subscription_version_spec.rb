@@ -13,6 +13,7 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  plan_version_id      :uuid             not null
+#  prev_id              :uuid
 #  subscription_id      :uuid             not null
 #
 require 'rails_helper'

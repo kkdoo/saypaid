@@ -11,15 +11,27 @@ class Subscriptions::StartNextPeriodService
       if terminate_service.can_be_terminated?
         terminate_service.call
       else
+        if have_new_version?
+          @new_version = @subscription_version.next
+        else
+          @new_version = @subscription_version
+        end
+
         new_start, new_end = calc_new_period
 
         if is_terminated_in_new_period?(new_end)
           new_end = @subscription_version.terminate_at
         end
 
-        @subscription_version.current_period_start = new_start
-        @subscription_version.current_period_end = new_end
-        @subscription_version.save!
+        ActiveRecord::Base.transaction do
+          @new_version.update!(
+            current_period_start: new_start,
+            current_period_end: new_end,
+          )
+          if have_new_version?
+            @subscription.update!(current_version_id: @new_version.id)
+          end
+        end
 
         create_event
       end
@@ -38,6 +50,10 @@ class Subscriptions::StartNextPeriodService
     @subscription_version.terminate_at ? time >= @subscription_version.terminate_at : false
   end
 
+  def have_new_version?
+    @subscription_version.next.present?
+  end
+
   def is_terminated_in_new_period?(end_at)
     return false if @subscription_version.terminate_at.nil?
     @subscription_version.terminate_at <= end_at
@@ -47,7 +63,7 @@ class Subscriptions::StartNextPeriodService
     new_start = @subscription_version.current_period_end
     [
       new_start,
-      new_start + @subscription_version.plan.interval_length,
+      new_start + @new_version.plan.interval_length,
     ]
   end
 
