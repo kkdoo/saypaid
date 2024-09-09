@@ -1,6 +1,6 @@
 require "yaml"
 
-class ImportLayer < BaseService
+class ImportLayerService < BaseService
   attr_reader :account, :file
 
   def initialize(account, file)
@@ -18,14 +18,13 @@ class ImportLayer < BaseService
     pricing_model = YAML.load_file(file)
 
     process_pricing_model(pricing_model)
-
-    pricing_model.active!
-    pricing_model
   end
 
   def process_pricing_model(pricing_model)
-    pricing_model["layers"].each do |layer_opts|
-      process_layer(layer_opts)
+    pricing_model["layers"].map do |layer_opts|
+      layer = process_layer(layer_opts)
+      layer.active!
+      layer
     end
   end
 
@@ -34,6 +33,8 @@ class ImportLayer < BaseService
 
     process_plans(layer, layer_opts["plans"])
     process_pricing_tables(layer, layer_opts["pricing_tables"])
+
+    layer
   end
 
   def process_pricing_tables(layer, pricing_tables_opts)
