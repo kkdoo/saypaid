@@ -1,4 +1,4 @@
-class Subscriptions::ActivateService
+class Subscriptions::StartService
   def initialize(subscription)
     @subscription = subscription
   end
@@ -12,6 +12,8 @@ class Subscriptions::ActivateService
       status: new_subscription_status,
       is_active_now: true,
     )
+
+    create_event
 
     if @subscription.pending?
       Invoices::CreateService.new(@subscription, finalize: true).call
@@ -44,5 +46,9 @@ class Subscriptions::ActivateService
     else
       Subscription.statuses[:active]
     end
+  end
+
+  def create_event
+    Events::CreateService.new(@subscription.layer, name: "subscriptions.start", object: @subscription).call
   end
 end

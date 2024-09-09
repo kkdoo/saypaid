@@ -29,7 +29,7 @@ class Subscriptions::CreateService < BaseService
     end
     Events::CreateService.new(@subscription.layer, name: "subscriptions.create", object: @subscription).call
 
-    Subscriptions::ActivateService.new(@subscription).call
+    Subscriptions::StartService.new(@subscription).call
     @subscription
   end
 
