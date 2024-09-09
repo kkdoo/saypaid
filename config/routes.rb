@@ -1,3 +1,6 @@
+require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -13,4 +16,5 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   mount RootApi => "/"
+  mount Sidekiq::Web => "/sidekiq"
 end

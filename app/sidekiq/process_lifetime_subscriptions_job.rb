@@ -1,4 +1,4 @@
-class ProcessLifetimeSubscroptionsJob
+class ProcessLifetimeSubscriptionsJob
   include Sidekiq::Job
 
   def perform(*args)

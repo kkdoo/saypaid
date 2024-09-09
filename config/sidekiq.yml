@@ -1,0 +1,4 @@
+:scheduler:
+  :schedule:
+    ProcessLifetimeSubscriptionsJob:
+      cron: "0 * * * * *"

@@ -41,6 +41,7 @@ gem "discard"
 gem "grape"
 gem "grape-entity"
 gem "sidekiq"
+gem "sidekiq-scheduler"
 gem "excon"
 
 group :development, :test do
