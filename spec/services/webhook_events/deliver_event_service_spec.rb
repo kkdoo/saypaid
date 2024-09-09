@@ -51,11 +51,10 @@ RSpec.describe WebhookEvents::DeliverEventService do
 
       context 'when do request' do
         context 'and response was success' do
-          let(:response) { double(status: 200) }
-
           it "ignore request sending & mark webhook event as accepted" do
             expect(webhook_event).to receive(:sending!).and_call_original
-            expect(service).to receive(:do_request).and_return(response)
+            stub_request(:post, "https://example.com/callback").
+              to_return(status: 200, body: "", headers: {})
 
             service.call
 
@@ -80,7 +79,8 @@ RSpec.describe WebhookEvents::DeliverEventService do
           shared_examples 'have declined status' do
             it "ignore request sending & mark webhook event as declined" do
               expect(webhook_event).to receive(:sending!).and_call_original
-              expect(service).to receive(:do_request).and_return(response)
+              stub_request(:post, "https://example.com/callback").
+                to_return(status: response_code, body: "", headers: {})
 
               expect {
                 service.call
@@ -91,19 +91,19 @@ RSpec.describe WebhookEvents::DeliverEventService do
           end
 
           context 'and response was not found' do
-            let(:response) { double(status: 404) }
+            let(:response_code) { 404 }
 
             it_behaves_like 'have declined status'
           end
 
           context 'and response was internal error' do
-            let(:response) { double(status: 500) }
+            let(:response_code) { 500 }
 
             it_behaves_like 'have declined status'
           end
 
           context 'and response was redirect' do
-            let(:response) { double(status: 301) }
+            let(:response_code) { 301 }
 
             it_behaves_like 'have declined status'
           end
