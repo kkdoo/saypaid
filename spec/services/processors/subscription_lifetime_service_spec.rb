@@ -9,6 +9,16 @@ RSpec.describe Processors::SubscriptionLifetimeService do
   context '#call' do
     before(:each) do
       freeze_time
+      # active subscription will be skipped
+      create_subscription(
+        layer:,
+        customer:,
+        version: {
+          current_period_start: 30.days.ago,
+          current_period_end: 1.day.from_now,
+        },
+        attrs: attributes_for(:subscription, :active),
+      )
 
       # ready to start
       create_subscription(
